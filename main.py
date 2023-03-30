@@ -1,9 +1,18 @@
 from tkinter import *
-
+from tkinter import messagebox
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
-                        
+def save():
+    if len(website_entry.get()) == 0 or len(email_entry.get()) == 0 or len(password_entry.get()) == 0:
+        return messagebox.showwarning(title="Empty Fields", message="The fields can not be empty!")
+                                      
+    is_ok = messagebox.askokcancel(f"{website_entry.get()}", message=f"These are the credentials you entered: \nEmail: {email_entry.get()} \nPassword: {password_entry.get()}")
+    if is_ok:                               
+        with open("data.txt", "a") as file:
+            file.write(f"{website_entry.get()} | {email_entry.get()} | {password_entry.get()}\n")
+        website_entry.delete(0, END)
+        password_entry.delete(0, END)                          
 # ---------------------------- UI SETUP ------------------------------- #
 window =Tk()
 window.title("Password Manager")
@@ -34,7 +43,7 @@ password_label.grid(column=0, row=3)
 password_entry = Entry(width=30)
 password_entry.grid(column=1,row=3, sticky="w")
 #Password Generator Button
-password_generate_btn = Button(text="Generate Password", command=generate_password)
+password_generate_btn = Button(text="Generate Password")
 password_generate_btn.grid(column=2, row=3)
 #Add Button
 add_button = Button(text="Add", width=36, command=save)
