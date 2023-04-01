@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 import random
+import json
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 def generate_password():
     password_entry.delete(0, END)
@@ -19,13 +20,24 @@ def generate_password():
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def save():
-    if len(website_entry.get()) == 0 or len(email_entry.get()) == 0 or len(password_entry.get()) == 0:
+    website =website_entry.get()
+    email = email_entry.get()
+    password = password_entry.get()
+    new_data = {
+        website: {
+            "email": email,
+            "password": password,
+            }
+        }
+    if len(website) == 0 or len(email) == 0 or len(password) == 0:
         return messagebox.showwarning(title="Empty Fields", message="The fields can not be empty!")
-                                      
-    is_ok = messagebox.askokcancel(f"{website_entry.get()}", message=f"These are the credentials you entered: \nEmail: {email_entry.get()} \nPassword: {password_entry.get()}")
-    if is_ok:                               
-        with open("data.txt", "a") as file:
-            file.write(f"{website_entry.get()} | {email_entry.get()} | {password_entry.get()}\n")
+    else:                            
+        with open("data.json", "r") as file:
+            data = json.load(file)
+            data.update(new_data)
+        with open("data.json", "w") as file:
+            json.dump(data, file, indent=4)
+            
         website_entry.delete(0, END)
         password_entry.delete(0, END)                          
 # ---------------------------- UI SETUP ------------------------------- #
