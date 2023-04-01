@@ -31,15 +31,20 @@ def save():
         }
     if len(website) == 0 or len(email) == 0 or len(password) == 0:
         return messagebox.showwarning(title="Empty Fields", message="The fields can not be empty!")
-    else:                            
-        with open("data.json", "r") as file:
-            data = json.load(file)
-            data.update(new_data)
-        with open("data.json", "w") as file:
-            json.dump(data, file, indent=4)
-            
-        website_entry.delete(0, END)
-        password_entry.delete(0, END)                          
+    else:
+        try:
+            with open("data.json", "r") as file:
+                data = json.load(file)
+                data.update(new_data)
+        except FileNotFoundError:        
+            with open("data.json", "w") as file:
+                json.dump(new_data, file, indent=4)
+        else:
+            with open("data.json", "w") as file:
+                json.dump(data, file, indent=4)
+        finally:        
+            website_entry.delete(0, END)
+            password_entry.delete(0, END)                          
 # ---------------------------- UI SETUP ------------------------------- #
 window =Tk()
 window.title("Password Manager")
