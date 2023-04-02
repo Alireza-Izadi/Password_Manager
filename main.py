@@ -45,7 +45,7 @@ def save():
         finally:        
             website_entry.delete(0, END)
             password_entry.delete(0, END)
-#----------------SEARCH WEBSITE CREDENTIALS---------------#
+#----------------SEARCH WEBSITES---------------#
 def search():
     website =website_entry.get()
     try:
