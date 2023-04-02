@@ -44,7 +44,24 @@ def save():
                 json.dump(data, file, indent=4)
         finally:        
             website_entry.delete(0, END)
-            password_entry.delete(0, END)                          
+            password_entry.delete(0, END)
+#----------------SEARCH WEBSITE CREDENTIALS---------------#
+def search():
+    website =website_entry.get()
+    try:
+        with open("data.json", "r") as file:
+            data = json.load(file)
+            for _ in data.keys():
+                if website in data.keys():
+                    messagebox.showinfo(title=website, message=f"Email:{data[website]['email']}\nPassword: {data[website]['password']}")
+                    break
+                else:
+                    raise FileNotFoundError
+    except FileNotFoundError:
+        messagebox.showinfo(title=website, message="Found No Record!")
+        
+
+        
 # ---------------------------- UI SETUP ------------------------------- #
 window =Tk()
 window.title("Password Manager")
@@ -62,7 +79,7 @@ website_entry = Entry(width=35)
 website_entry.focus()
 website_entry.grid(column=1,row=1,columnspan=2, sticky="w")
 #Website Search Button
-search_button = Button(text="Search")
+search_button = Button(text="Search", command=search)
 search_button.grid(column=2, row=1)
 #Email/Username Label
 email_label = Label(text="Email/Username:")
